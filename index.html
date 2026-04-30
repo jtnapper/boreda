@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Bore Da</title>
+  <style>
+    :root {
+      --glass-dark: rgba(15, 23, 42, 0.78);
+      --glass-strong: rgba(30, 41, 59, 0.88);
+      --accent: #f59e0b;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      color: #f1f5f9;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      overflow: hidden;
+      background: linear-gradient(120deg, #ff7a18, #ff512f, #f09819, #ffb347);
+      background-size: 300% 300%;
+      animation: gradientFlow 22s ease infinite;
+    }
+
+    body::before {
+      content: "";
+      position: absolute;
+      width: 140%;
+      height: 140%;
+      top: -20%;
+      left: -20%;
+      background: radial-gradient(circle at 30% 30%, rgba(255,200,120,0.15), transparent 60%),
+                  radial-gradient(circle at 70% 70%, rgba(255,120,80,0.15), transparent 60%);
+      filter: blur(90px);
+      animation: pulseGlow 14s ease-in-out infinite;
+      z-index: 0;
+    }
+
+    .splash {
+      position: absolute;
+      z-index: 2;
+      text-align: center;
+      animation: fadeOut 1.2s ease forwards;
+      animation-delay: 1.2s;
+    }
+
+    .splash h1 {
+      font-size: 42px;
+      font-weight: 500;
+      opacity: 0;
+      animation: splashIn 1s ease forwards;
+    }
+
+    .container {
+      position: relative;
+      z-index: 1;
+      width: 92%;
+      max-width: 440px;
+      padding: 26px;
+      border-radius: 28px;
+      background: var(--glass-dark);
+      backdrop-filter: blur(25px);
+      box-shadow: 0 20px 40px rgba(0,0,0,0.35);
+      opacity: 0;
+      transform: scale(0.96);
+      animation: reveal 0.8s ease forwards;
+      animation-delay: 1.3s;
+    }
+
+    h1 {
+      font-size: 28px;
+      margin-bottom: 6px;
+    }
+
+    .date {
+      opacity: 0.75;
+      margin-bottom: 20px;
+    }
+
+    .weather {
+      margin-bottom: 26px;
+      padding: 18px;
+      border-radius: 18px;
+      background: var(--glass-strong);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .weather-temp {
+      font-size: 34px;
+      font-weight: bold;
+    }
+
+    .weather-icon {
+      width: 60px;
+      height: 60px;
+      animation: float 3s ease-in-out infinite;
+    }
+
+    .todo-item {
+      display: flex;
+      align-items: center;
+      margin-bottom: 14px;
+      padding: 14px;
+      border-radius: 14px;
+      background: rgba(255,255,255,0.05);
+      transition: transform 0.2s ease, background 0.2s ease;
+    }
+
+    .todo-item.completed {
+      opacity: 0.6;
+      transform: scale(0.98);
+    }
+
+    .todo-item input {
+      margin-right: 14px;
+      transform: scale(1.6);
+      accent-color: var(--accent);
+    }
+
+    .todo-item input:checked + span {
+      text-decoration: line-through;
+      opacity: 0.6;
+    }
+
+    .todo-item span {
+      transition: all 0.2s ease;
+    }
+
+    .actions {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 20px;
+      gap: 10px;
+    }
+
+    .action-btn {
+      flex: 1;
+      text-align: center;
+      padding: 12px;
+      border-radius: 14px;
+      background: rgba(255,255,255,0.06);
+      backdrop-filter: blur(10px);
+      text-decoration: none;
+      color: #f1f5f9;
+      transition: transform 0.15s ease, background 0.2s ease;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      font-size: 12px;
+    }
+
+    .action-btn:active {
+      transform: scale(0.92);
+    }
+
+    .action-btn img {
+      width: 28px;
+      height: 28px;
+      margin-bottom: 6px;
+    }
+
+    .quote {
+      margin-top: 22px;
+      font-style: italic;
+      opacity: 0.85;
+      font-size: 14px;
+    }
+
+    @keyframes gradientFlow {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+
+    @keyframes pulseGlow {
+      0%,100% { transform: scale(1); opacity: 0.5; }
+      50% { transform: scale(1.08); opacity: 0.8; }
+    }
+
+    @keyframes splashIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes fadeOut {
+      to { opacity: 0; transform: translateY(-10px); }
+    }
+
+    @keyframes reveal {
+      to { opacity: 1; transform: scale(1); }
+    }
+
+    @keyframes float {
+      0%,100% { transform: translateY(0); }
+      50% { transform: translateY(-6px); }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="splash">
+    <h1 id="splash-greeting">Bore Da</h1>
+  </div>
+
+  <div class="container">
+    <h1 id="greeting">Bore Da</h1>
+    <div class="date" id="date"></div>
+
+    <div class="weather">
+      <div>
+        <div>Weather</div>
+        <div class="weather-temp" id="temp">--°C</div>
+        <div id="weather-desc"></div>
+      </div>
+      <img id="weather-icon" class="weather-icon" src="icons/sun.png" alt="weather icon">
+    </div>
+
+    <div class="todo">
+      <div class="todo-item"><input type="checkbox"><span>Light Bible reading</span></div>
+      <div class="todo-item"><input type="checkbox"><span>Relaxing ACCA lecture</span></div>
+      <div class="todo-item"><input type="checkbox"><span>Quick exercise</span></div>
+    </div>
+
+    <div class="actions">
+      <a class="action-btn" href="https://www.youtube.com">
+        <img src="icons/youtube.png" alt="YouTube">
+        YouTube
+      </a>
+      <a class="action-btn" href="https://www.thetimes.co.uk">
+        <img src="icons/times.png" alt="The Times">
+        The Times
+      </a>
+      <a class="action-btn" href="https://www.metoffice.gov.uk">
+        <img src="icons/met.png" alt="Met Office">
+        Met Office
+      </a>
+    </div>
+
+    <div class="quote" id="quote"></div>
+  </div>
+
+  <script>
+    const hour = new Date().getHours();
+    const greetingText = hour < 12 ? 'Bore Da' : hour < 18 ? 'Prynhawn Da' : 'Noswaith Dda';
+
+    document.getElementById('greeting').textContent = greetingText;
+    document.getElementById('splash-greeting').textContent = greetingText;
+
+    const dateEl = document.getElementById('date');
+    const options = { weekday: 'long', day: 'numeric', month: 'long' };
+    const todayStr = new Date().toDateString();
+    dateEl.textContent = new Date().toLocaleDateString(undefined, options);
+
+    const lastVisit = localStorage.getItem('lastVisit');
+    if (lastVisit !== todayStr) {
+      localStorage.clear();
+      localStorage.setItem('lastVisit', todayStr);
+    }
+
+    fetch('https://api.open-meteo.com/v1/forecast?latitude=51.4800&longitude=-3.1800&current_weather=true')
+      .then(res => res.json())
+      .then(data => {
+        const temp = data.current_weather.temperature;
+        const code = data.current_weather.weathercode;
+
+        document.getElementById('temp').textContent = temp + '°C';
+
+        const map = {
+          0: { text: 'Clear', icon: 'sun.png' },
+          1: { text: 'Mainly clear', icon: 'sun.png' },
+          2: { text: 'Cloudy', icon: 'cloud.png' },
+          3: { text: 'Overcast', icon: 'cloud.png' },
+          61: { text: 'Rain', icon: 'rain.png' },
+          63: { text: 'Rain', icon: 'rain.png' },
+          65: { text: 'Heavy rain', icon: 'rain.png' }
+        };
+
+        const weather = map[code] || { text: 'Unknown', icon: 'cloud.png' };
+
+        document.getElementById('weather-desc').textContent = weather.text;
+        document.getElementById('weather-icon').src = 'icons/' + weather.icon;
+      });
+
+    // Bible verses (local list)
+    const verses = [
+      "Philippians 4:13 — I can do all things through Christ who strengthens me.",
+      "Psalm 23:1 — The Lord is my shepherd; I shall not want.",
+      "Proverbs 3:5 — Trust in the Lord with all your heart.",
+      "Isaiah 41:10 — Do not fear, for I am with you.",
+      "Matthew 6:33 — Seek first the kingdom of God."
+    ];
+    document.getElementById('quote').textContent = verses[Math.floor(Math.random() * verses.length)];
+
+    const checkboxes = document.querySelectorAll('input[type="checkbox"]');
+    checkboxes.forEach((box, i) => {
+      const saved = localStorage.getItem('todo-' + i);
+      box.checked = saved === 'true';
+
+      const parent = box.closest('.todo-item');
+      if (box.checked) parent.classList.add('completed');
+
+      box.addEventListener('change', () => {
+        localStorage.setItem('todo-' + i, box.checked);
+
+        parent.classList.toggle('completed');
+
+        // subtle pop animation
+        parent.animate([
+          { transform: 'scale(1)' },
+          { transform: 'scale(1.05)' },
+          { transform: 'scale(0.98)' }
+        ], {
+          duration: 250,
+          easing: 'ease-out'
+        });
+      });
+    });
+  </script>
+</body>
+</html>
