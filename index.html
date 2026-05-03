@@ -3,12 +3,12 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Bore Da</title>
+  <title>Morning Briefing</title>
   <style>
     :root {
       --glass-dark: rgba(15, 23, 42, 0.78);
       --glass-strong: rgba(30, 41, 59, 0.88);
-      --accent: #f59e0b;
+      --accent: #9ca3af; /* darker grey */
     }
 
     * { box-sizing: border-box; }
@@ -72,15 +72,9 @@
       animation-delay: 1.3s;
     }
 
-    h1 {
-      font-size: 28px;
-      margin-bottom: 6px;
-    }
+    h1 { font-size: 28px; margin-bottom: 6px; }
 
-    .date {
-      opacity: 0.75;
-      margin-bottom: 20px;
-    }
+    .date { opacity: 0.75; margin-bottom: 20px; }
 
     .weather {
       margin-bottom: 26px;
@@ -92,10 +86,7 @@
       justify-content: space-between;
     }
 
-    .weather-temp {
-      font-size: 34px;
-      font-weight: bold;
-    }
+    .weather-temp { font-size: 34px; font-weight: bold; }
 
     .weather-icon {
       width: 60px;
@@ -111,26 +102,45 @@
       border-radius: 14px;
       background: rgba(255,255,255,0.05);
       transition: transform 0.2s ease, background 0.2s ease;
+      cursor: pointer;
     }
 
-    .todo-item.completed {
-      opacity: 0.6;
-      transform: scale(0.98);
-    }
+    .todo-item.completed { opacity: 0.6; transform: scale(0.98); }
 
+    /* Custom checkbox */
     .todo-item input {
+      appearance: none;
+      width: 22px;
+      height: 22px;
+      border-radius: 6px;
+      border: 2px solid var(--accent);
       margin-right: 14px;
-      transform: scale(1.6);
-      accent-color: var(--accent);
+      display: inline-block;
+      position: relative;
+      transition: all 0.2s ease;
     }
+
+    .todo-item input:checked {
+      background: var(--accent);
+    }
+
+    .todo-item input:checked::after {
+      content: '';
+      position: absolute;
+      left: 6px;
+      top: 2px;
+      width: 6px;
+      height: 12px;
+      border: solid #111;
+      border-width: 0 2px 2px 0;
+      transform: rotate(45deg);
+    }
+
+    .todo-item span { transition: all 0.2s ease; }
 
     .todo-item input:checked + span {
       text-decoration: line-through;
       opacity: 0.6;
-    }
-
-    .todo-item span {
-      transition: all 0.2s ease;
     }
 
     .actions {
@@ -156,9 +166,7 @@
       font-size: 12px;
     }
 
-    .action-btn:active {
-      transform: scale(0.92);
-    }
+    .action-btn:active { transform: scale(0.92); }
 
     .action-btn img {
       width: 28px;
@@ -166,12 +174,7 @@
       margin-bottom: 6px;
     }
 
-    .quote {
-      margin-top: 22px;
-      font-style: italic;
-      opacity: 0.85;
-      font-size: 14px;
-    }
+    .quote { margin-top: 22px; font-style: italic; opacity: 0.85; font-size: 14px; }
 
     @keyframes gradientFlow {
       0% { background-position: 0% 50%; }
@@ -206,16 +209,16 @@
 <body>
 
   <div class="splash">
-    <h1 id="splash-greeting">Bore Da</h1>
+    <h1 id="splash-greeting">Good morning</h1>
   </div>
 
   <div class="container">
-    <h1 id="greeting">Bore Da</h1>
+    <h1 id="greeting">Good morning</h1>
     <div class="date" id="date"></div>
 
     <div class="weather">
       <div>
-        <div>Weather</div>
+        <div>London</div>
         <div class="weather-temp" id="temp">--°C</div>
         <div id="weather-desc"></div>
       </div>
@@ -223,9 +226,9 @@
     </div>
 
     <div class="todo">
-      <div class="todo-item"><input type="checkbox"><span>Light Bible reading</span></div>
-      <div class="todo-item"><input type="checkbox"><span>Relaxing ACCA lecture</span></div>
-      <div class="todo-item"><input type="checkbox"><span>Quick exercise</span></div>
+      <label class="todo-item"><input type="checkbox"><span>Review priorities</span></label>
+      <label class="todo-item"><input type="checkbox"><span>30 min focused work</span></label>
+      <label class="todo-item"><input type="checkbox"><span>Quick exercise</span></label>
     </div>
 
     <div class="actions">
@@ -248,7 +251,7 @@
 
   <script>
     const hour = new Date().getHours();
-    const greetingText = hour < 12 ? 'Bore Da' : hour < 18 ? 'Prynhawn Da' : 'Noswaith Dda';
+    const greetingText = hour < 12 ? 'Good morning' : hour < 18 ? 'Good afternoon' : 'Good evening';
 
     document.getElementById('greeting').textContent = greetingText;
     document.getElementById('splash-greeting').textContent = greetingText;
@@ -264,7 +267,7 @@
       localStorage.setItem('lastVisit', todayStr);
     }
 
-    fetch('https://api.open-meteo.com/v1/forecast?latitude=51.4800&longitude=-3.1800&current_weather=true')
+    fetch('https://api.open-meteo.com/v1/forecast?latitude=51.5072&longitude=-0.1276&current_weather=true')
       .then(res => res.json())
       .then(data => {
         const temp = data.current_weather.temperature;
@@ -288,15 +291,13 @@
         document.getElementById('weather-icon').src = 'icons/' + weather.icon;
       });
 
-    // Bible verses (local list)
-    const verses = [
-      "Philippians 4:13 — I can do all things through Christ who strengthens me.",
-      "Psalm 23:1 — The Lord is my shepherd; I shall not want.",
-      "Proverbs 3:5 — Trust in the Lord with all your heart.",
-      "Isaiah 41:10 — Do not fear, for I am with you.",
-      "Matthew 6:33 — Seek first the kingdom of God."
-    ];
-    document.getElementById('quote').textContent = verses[Math.floor(Math.random() * verses.length)];
+    // Load verses from external file
+    fetch('verses.json')
+      .then(res => res.json())
+      .then(data => {
+        const verse = data[Math.floor(Math.random() * data.length)];
+        document.getElementById('quote').textContent = verse;
+      });
 
     const checkboxes = document.querySelectorAll('input[type="checkbox"]');
     checkboxes.forEach((box, i) => {
@@ -308,10 +309,8 @@
 
       box.addEventListener('change', () => {
         localStorage.setItem('todo-' + i, box.checked);
-
         parent.classList.toggle('completed');
 
-        // subtle pop animation
         parent.animate([
           { transform: 'scale(1)' },
           { transform: 'scale(1.05)' },
