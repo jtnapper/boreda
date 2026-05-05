@@ -44,18 +44,13 @@
     .stage {
       position: absolute;
       z-index: 10;
-      text-align: center;
-      opacity: 1;
-      transition: all 0.6s ease;
       width: 100%;
       height: 100%;
-      top: 0;
-      left: 0;
       display: flex;
       flex-direction: column;
       justify-content: center;
       align-items: center;
-      background: transparent;
+      text-align: center;
     }
 
     .stage.shifted h1 {
@@ -81,16 +76,108 @@
       transform: translateY(0);
     }
 
-    .temp-details {
-      margin-top: 8px;
-      font-size: 18px;
-      opacity: 0.85;
+    .temp-wrapper {
+      padding: 26px;
+      border-radius: 22px;
+      background: rgba(15, 23, 42, 0.65);
+      backdrop-filter: blur(18px);
+      box-shadow: 0 12px 30px rgba(0,0,0,0.3);
     }
+
+    .temp-scale {
+      position: relative;
+      height: 30px;
+      margin-bottom: 22px;
+    }
+
+    .scale-line {
+      position: absolute;
+      top: 50%;
+      left: 0;
+      right: 0;
+      height: 4px;
+      border-radius: 4px;
+      background: linear-gradient(to right, #3b82f6, #38bdf8, #f59e0b, #ef4444);
+      transform: translateY(-50%);
+    }
+
+    .scale-point {
+      position: absolute;
+      top: 50%;
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background: #fff;
+      transform: translate(-50%, -50%);
+      opacity: 0;
+      transition: all 0.4s ease;
+    }
+
+    .scale-point.visible {
+      opacity: 1;
+      transform: translate(-50%, -50%) scale(1.2);
+    }
+
+    .scale-label {
+      position: absolute;
+      top: 100%;
+      font-size: 11px;
+      opacity: 0.7;
+      transform: translateX(-50%);
+    }
+
+    #label-min { left: 0%; }
+    #label-mid { left: 50%; }
+    #label-max { left: 100%; }
+
+    .temp-cards {
+      display: flex;
+      gap: 10px;
+      margin-top: 16px;
+    }
+
+    .temp-card {
+      flex: 1;
+      padding: 14px;
+      border-radius: 16px;
+      background: rgba(255,255,255,0.08);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .temp-card .label {
+      font-size: 11px;
+      opacity: 0.65;
+      margin-bottom: 4px;
+      letter-spacing: 0.5px;
+    }
+
+    .temp-card .value {
+      font-size: 20px;
+      font-weight: 600;
+    }
+
+    .temp-card.now {
+      transform: scale(1.08);
+      background: rgba(255,255,255,0.12);
+    }
+
+    .temp-card.now .value {
+      font-size: 26px;
+      font-weight: 700;
+    }
+
+    .temp-details { margin-top: 10px; font-size: 14px; }
+
+    .temp-error { margin-top: 8px; font-size: 13px; color: #fca5a5; }
 
     .hint {
       margin-top: 18px;
       font-size: 13px;
-      opacity: 0.6;
+      opacity: 0;
+      transition: opacity 0.6s ease;
     }
 
     .container {
@@ -103,7 +190,6 @@
       border-radius: 28px;
       background: var(--glass-dark);
       backdrop-filter: blur(25px);
-      box-shadow: 0 20px 40px rgba(0,0,0,0.35);
       opacity: 0;
       transform: scale(0.96);
       transition: all 0.5s ease;
@@ -111,7 +197,6 @@
 
     .container.visible { opacity: 1; transform: scale(1); }
 
-    h1 { font-size: 28px; margin-bottom: 6px; }
     .date { opacity: 0.75; margin-bottom: 20px; }
 
     .weather {
@@ -121,61 +206,37 @@
       background: var(--glass-strong);
       display: flex;
       justify-content: space-between;
+      align-items: center;
     }
 
-    .weather-temp { font-size: 34px; font-weight: bold; }
-    .weather-icon { width: 60px; height: 60px; }
+    .weather-temp { font-size: 30px; font-weight: bold; }
+    .weather-icon { width: 50px; height: 50px; }
 
     .todo-item {
       display: flex;
       align-items: center;
-      margin-bottom: 14px;
-      padding: 14px;
-      border-radius: 14px;
+      margin-bottom: 12px;
+      padding: 12px;
+      border-radius: 12px;
       background: rgba(255,255,255,0.05);
       cursor: pointer;
     }
 
-    .todo-item.completed { opacity: 0.6; transform: scale(0.98); }
+    .todo-item input { margin-right: 10px; }
 
-    .todo-item input {
-      appearance: none;
-      width: 22px;
-      height: 22px;
-      border-radius: 6px;
-      border: 2px solid var(--accent);
-      margin-right: 14px;
-      position: relative;
-    }
-
-    .todo-item input:checked { background: var(--accent); }
-
-    .todo-item input:checked::after {
-      content: '';
-      position: absolute;
-      left: 6px;
-      top: 2px;
-      width: 6px;
-      height: 12px;
-      border: solid #111;
-      border-width: 0 2px 2px 0;
-      transform: rotate(45deg);
-    }
-
-    .actions { display: flex; gap: 10px; margin-top: 20px; }
+    .actions { display: flex; gap: 10px; margin-top: 18px; }
 
     .action-btn {
       flex: 1;
       text-align: center;
-      padding: 12px;
-      border-radius: 14px;
+      padding: 10px;
+      border-radius: 12px;
       background: rgba(255,255,255,0.06);
       text-decoration: none;
       color: #f1f5f9;
       display: flex;
       flex-direction: column;
       align-items: center;
-      justify-content: center;
       font-size: 12px;
       gap: 6px;
     }
@@ -184,11 +245,9 @@
       width: clamp(22px, 6vw, 32px);
       height: clamp(22px, 6vw, 32px);
       object-fit: contain;
-      display: block;
-      pointer-events: none;
     }
 
-    .quote { margin-top: 22px; font-style: italic; opacity: 0.85; font-size: 14px; }
+    .quote { margin-top: 18px; font-style: italic; opacity: 0.85; font-size: 14px; }
   </style>
 </head>
 <body>
@@ -197,14 +256,41 @@
     <h1 id="splash-greeting">Good morning</h1>
 
     <div id="temp-block" class="temp-block">
-      <h1 id="temp-main">--°C</h1>
-      <div class="temp-details" id="temp-range"></div>
-      <div class="temp-details" id="temp-summary"></div>
+      <div class="temp-wrapper">
+        <div class="temp-scale">
+          <div class="scale-line"></div>
+          <div class="scale-point" id="point-low"></div>
+          <div class="scale-point" id="point-current"></div>
+          <div class="scale-point" id="point-high"></div>
+
+          <div class="scale-label" id="label-min"></div>
+          <div class="scale-label" id="label-mid"></div>
+          <div class="scale-label" id="label-max"></div>
+        </div>
+
+        <div class="temp-cards">
+          <div class="temp-card">
+            <div class="label">Low</div>
+            <div class="value" id="temp-low">--°</div>
+          </div>
+          <div class="temp-card now">
+            <div class="label">Now</div>
+            <div class="value" id="temp-main">--°</div>
+          </div>
+          <div class="temp-card">
+            <div class="label">High</div>
+            <div class="value" id="temp-high">--°</div>
+          </div>
+        </div>
+
+        <div class="temp-details" id="temp-summary"></div>
+        <div class="temp-error" id="temp-error"></div>
+      </div>
       <div class="hint">Tap anywhere to continue</div>
     </div>
   </div>
 
-  <div id="main" class="container hidden">
+  <div id="main" class="container">
     <h1 id="greeting">Good morning</h1>
     <div class="date" id="date"></div>
 
@@ -236,30 +322,24 @@
     const stage = document.getElementById('stage');
     const tempBlock = document.getElementById('temp-block');
 
-    // Initial auto sequence
     setTimeout(() => {
       stage.classList.add('shifted');
       tempBlock.classList.add('visible');
+
+      setTimeout(() => {
+        document.querySelector('.hint').style.opacity = 1;
+      }, 700);
     }, 1500);
 
-    // Tap to continue
     stage.addEventListener('click', () => {
       stage.style.opacity = 0;
       setTimeout(() => {
         stage.style.display = 'none';
         const main = document.getElementById('main');
-        main.classList.remove('hidden');
+        main.classList.add('visible');
         main.style.pointerEvents = 'auto';
-        setTimeout(() => main.classList.add('visible'), 10);
       }, 400);
     });
-
-    const hour = new Date().getHours();
-    const greetingText = hour < 12 ? 'Good morning' : hour < 18 ? 'Good afternoon' : 'Good evening';
-    document.getElementById('greeting').textContent = greetingText;
-    document.getElementById('splash-greeting').textContent = greetingText;
-
-    document.getElementById('date').textContent = new Date().toLocaleDateString(undefined, { weekday: 'long', day: 'numeric', month: 'long' });
 
     fetch('https://api.open-meteo.com/v1/forecast?latitude=51.5072&longitude=-0.1276&current_weather=true&daily=temperature_2m_max,temperature_2m_min&timezone=auto')
       .then(res => res.json())
@@ -268,23 +348,41 @@
         const max = data.daily.temperature_2m_max[0];
         const min = data.daily.temperature_2m_min[0];
 
-        document.getElementById('temp').textContent = temp + '°C';
-        document.getElementById('temp-main').textContent = temp + '°C';
-        document.getElementById('temp-range').textContent = `High ${max}° • Low ${min}°`;
+        document.getElementById('temp-main').textContent = temp + '°';
+        document.getElementById('temp-high').textContent = max + '°';
+        document.getElementById('temp-low').textContent = min + '°';
 
-        let summary;
-        const range = max - min;
+        const padding = 4;
+        const minVal = Math.min(min, temp, max) - padding;
+        const maxVal = Math.max(min, temp, max) + padding;
+        const midVal = Math.round((minVal + maxVal) / 2);
 
-        if (temp < 10 && max < 15) summary = 'A properly cool day — crisp and consistent.';
-        else if (temp < 10 && max >= 18) summary = 'Cool start, but warming up later.';
-        else if (temp >= 18 && max < 22) summary = 'Mild and steady — comfortable throughout.';
-        else if (temp >= 20 && range > 8) summary = 'Warm day with a noticeable temperature swing.';
-        else if (max >= 25 && temp >= 18) summary = 'A warmer day ahead — likely to build heat.';
-        else if (max >= 25) summary = 'Hot later, even if it feels manageable now.';
-        else summary = 'A balanced day temperature-wise.';
+        document.getElementById('label-min').textContent = Math.round(minVal) + '°';
+        document.getElementById('label-mid').textContent = midVal + '°';
+        document.getElementById('label-max').textContent = Math.round(maxVal) + '°';
 
-        document.getElementById('temp-summary').textContent = summary;
+        const position = (t) => ((t - minVal) / (maxVal - minVal)) * 100;
+
+        const setPoint = (id, value, delay) => {
+          const el = document.getElementById(id);
+          el.style.left = position(value) + '%';
+          setTimeout(() => el.classList.add('visible'), delay);
+        };
+
+        setPoint('point-low', min, 0);
+        setPoint('point-current', temp, 120);
+        setPoint('point-high', max, 240);
+      })
+      .catch(() => {
+        document.getElementById('temp-error').textContent = 'Weather data unavailable — check connection.';
       });
+      // Populate dashboard
+    const hour = new Date().getHours();
+    const greetingText = hour < 12 ? 'Good morning' : hour < 18 ? 'Good afternoon' : 'Good evening';
+    document.getElementById('greeting').textContent = greetingText;
+    document.getElementById('splash-greeting').textContent = greetingText;
+
+    document.getElementById('date').textContent = new Date().toLocaleDateString(undefined, { weekday: 'long', day: 'numeric', month: 'long' });
 
     fetch('verses.json')
       .then(res => res.json())
@@ -297,15 +395,11 @@
     checkboxes.forEach((box, i) => {
       const saved = localStorage.getItem('todo-' + i);
       box.checked = saved === 'true';
-      const parent = box.closest('.todo-item');
-      if (box.checked) parent.classList.add('completed');
-
       box.addEventListener('change', () => {
         localStorage.setItem('todo-' + i, box.checked);
-        parent.classList.toggle('completed');
-        parent.animate([{ transform: 'scale(1)' }, { transform: 'scale(1.05)' }, { transform: 'scale(0.98)' }], { duration: 250 });
       });
     });
+
   </script>
 </body>
 </html>
