@@ -248,6 +248,29 @@
     }
 
     .quote { margin-top: 18px; font-style: italic; opacity: 0.85; font-size: 14px; }
+
+    .weather,
+    .todo-item,
+    .actions,
+    .quote {
+      opacity: 0;
+      transform: translateY(10px);
+      animation: fadeUp 0.6s ease forwards;
+    }
+
+    .weather { animation-delay: 0.1s; }
+    .todo-item:nth-child(1) { animation-delay: 0.2s; }
+    .todo-item:nth-child(2) { animation-delay: 0.3s; }
+    .todo-item:nth-child(3) { animation-delay: 0.4s; }
+    .actions { animation-delay: 0.5s; }
+    .quote { animation-delay: 0.6s; }
+
+    @keyframes fadeUp {
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
   </style>
 </head>
 <body>
@@ -372,9 +395,57 @@
         setPoint('point-low', min, 0);
         setPoint('point-current', temp, 120);
         setPoint('point-high', max, 240);
+
+        let summary;
+        const range = max - min;
+
+        if (temp < 10 && max < 15) {
+          summary = 'A properly cool day — crisp and consistent.';
+        } else if (temp < 10 && max >= 18) {
+          summary = 'Cool to start, but warming noticeably later.';
+        } else if (temp >= 18 && max < 22) {
+          summary = 'Mild and steady — comfortable throughout.';
+        } else if (temp >= 20 && range > 8) {
+          summary = 'A warmer day with a noticeable temperature swing.';
+        } else if (max >= 25 && temp >= 18) {
+          summary = 'A warm day ahead — likely to build heat.';
+        } else if (max >= 25) {
+          summary = 'Hot later, even if it feels manageable now.';
+        } else {
+          summary = 'A balanced day temperature-wise.';
+        }
+
+        document.getElementById('temp-summary').textContent = summary;
       })
       .catch(() => {
         document.getElementById('temp-error').textContent = 'Weather data unavailable — check connection.';
+      });
+
+    fetch('https://api.open-meteo.com/v1/forecast?latitude=51.5072&longitude=-0.1276&current_weather=true&timezone=auto')
+      .then(res => res.json())
+      .then(data => {
+        const weather = data.current_weather;
+
+        document.getElementById('temp').textContent =
+          Math.round(weather.temperature) + '°C';
+
+        const code = weather.weathercode;
+
+        const weatherMap = {
+          0: ['Clear', 'sun.png'],
+          1: ['Mostly clear', 'cloud-sun.png'],
+          2: ['Partly cloudy', 'cloud.png'],
+          3: ['Cloudy', 'cloud.png'],
+          61: ['Rain', 'rain.png'],
+          63: ['Heavy rain', 'rain.png'],
+          71: ['Snow', 'snow.png'],
+          95: ['Storms', 'storm.png']
+        };
+
+        const [desc, icon] = weatherMap[code] || ['Unknown', 'cloud.png'];
+
+        document.getElementById('weather-desc').textContent = desc;
+        document.getElementById('weather-icon').src = 'icons/' + icon;
       });
       // Populate dashboard
     const hour = new Date().getHours();
